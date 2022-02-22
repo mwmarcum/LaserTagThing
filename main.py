@@ -1,42 +1,41 @@
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QPixmap 
-from PyQt5.QtCore import *
 import sys
- 
- 
-class Window(QMainWindow):
-    def __init__(self):
-        super().__init__()
- 
-        self.acceptDrops()
-        # set the title
-        self.setWindowTitle("Image")
- 
-        # setting  the geometry of window
-        self.setGeometry(0, 0, 400, 300)
- 
-        # creating label
-        self.label = QLabel(self)
-         
-        # loading image
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+
+class Window(QWidget):
+    def __init__(self, *args, **kwargs):
+        QWidget.__init__(self, *args, **kwargs)
+
+        #loading image
         self.pixmap = QPixmap('logo.jpg')
         self.pixmap = self.pixmap.scaled(1000, 1000, Qt.KeepAspectRatio)
 
-        # adding image to label
+        #creating label
+        self.label = QLabel(self)
+        self.label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.label.setAlignment(Qt.AlignCenter)
+
+        #adding image to label
         self.label.setPixmap(self.pixmap)
- 
-        # Optional, resize label to image size
-        self.label.resize(self.pixmap.width(),
-                          self.pixmap.height())
- 
-        # show all the widgets
+
+        self.layout = QGridLayout()
+
+        #adding label to screen
+        self.layout.addWidget(self.label, 0, 0)
+        self.setStyleSheet("background-color: black;")
+
+        self.setLayout(self.layout)
         self.show()
- 
-# create pyqt5 app
-App = QApplication(sys.argv)
- 
-# create the instance of our Window
-window = Window()
-window.showMaximized()
-# start the app
-sys.exit(App.exec())
+
+        #after 3 seconds, it hides the image label
+        def on_timeout():
+            self.label.hide()
+
+        #setting timer
+        QTimer.singleShot(3000, on_timeout)
+
+app = QApplication(sys.argv)
+win = Window()
+win.showMaximized()
+sys.exit(app.exec_())
