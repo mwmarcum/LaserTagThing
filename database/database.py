@@ -33,7 +33,7 @@ class db:
         """
         inserts a new player
 
-        returns a boolean for whether the insert was successful
+        returns a boolean for whether or not the insert was successful
         """
 
         try:
@@ -52,7 +52,7 @@ class db:
         """
         inserts a new player, updates the player if there already is one with the same id
 
-        returns a boolean for whether the upsert was successful
+        returns a boolean for whether or not the upsert was successful
         """
 
         try:
@@ -76,7 +76,11 @@ class db:
 
 
     def update(self, id, first_name, last_name, codename):
-        """ update a player's data """
+        """
+        update a player's data
+
+        returns a boolean for whether or not the update was successful
+        """
 
         try:
             self.cursor.execute("""
