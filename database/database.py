@@ -9,15 +9,9 @@ class db:
         self.cursor = None
 
 
-    def open(self):
-        """ connect to the database """
-
-        dbURL = os.environ.get("DATABASE_URL")
-        self.connection = psycopg2.connect(dbURL, sslmode = "require")
-        self.cursor = self.connection.cursor(cursor_factory = psycopg2.extras.DictCursor)
-
-
+    def __initTable(self):
         """ create the player table """
+
         self.cursor.execute("""
             CREATE TABLE IF NOT EXISTS player (
                 id INT PRIMARY KEY,
@@ -27,6 +21,32 @@ class db:
             );
         """)
         self.connection.commit()
+
+
+    def open(self):
+        """ connect to the database and set up the table if needed """
+
+        dbURL = os.environ.get("DATABASE_URL")
+        self.connection = psycopg2.connect(dbURL, sslmode = "require")
+        self.cursor = self.connection.cursor(cursor_factory = psycopg2.extras.DictCursor)
+
+        self.__initTable()
+
+
+    def remotelyConnect(self, dbname, user, password, host, port = "5432"):
+        """ remotely connect to the database for testing and set up the table if needed """
+
+        self.connection = psycopg2.connect(
+            dbname = dbname,
+            user = user,
+            password = password,
+            host = host,
+            port = port,
+            sslmode = "require"
+        )
+        self.cursor = self.connection.cursor(cursor_factory = psycopg2.extras.DictCursor)
+
+        self.__initTable()
 
 
     def insert(self, id, first_name, last_name, codename):
