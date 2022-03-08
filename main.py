@@ -6,7 +6,7 @@ from PyQt5.QtCore import *
 from playerEntryScreen import Ui_MainWindow
 from database.database import db
 
-
+# this comment is for a test commit
 # pyqt/python is stupid and will immediately gc all windows
 # so hold a reference to all windows so it knows not to destroy them
 main_window = None
